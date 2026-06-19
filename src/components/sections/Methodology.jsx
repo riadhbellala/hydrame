@@ -1,4 +1,5 @@
-import ScrollReveal from '../ui/ScrollReveal'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 const steps = [
   {
@@ -9,7 +10,7 @@ const steps = [
   {
     index: '02',
     title: 'Modélisation',
-    desc: 'Simulation numérique et dimensionnement. Nous utilisons les meilleurs logiciels du marché pour projeter les différents scénarios d\'aménagement.',
+    desc: "Simulation numérique et dimensionnement. Nous utilisons les meilleurs logiciels du marché pour projeter les différents scénarios d'aménagement.",
   },
   {
     index: '03',
@@ -19,61 +20,181 @@ const steps = [
   {
     index: '04',
     title: 'Supervision',
-    desc: 'Suivi rigoureux de l\'exécution. Nous veillons au parfait respect des prescriptions techniques et environnementales sur le terrain.',
+    desc: "Suivi rigoureux de l'exécution. Nous veillons au parfait respect des prescriptions techniques et environnementales sur le terrain.",
   },
 ]
 
+const N = steps.length
+// STEP = how many vw/vh between each panel centre
+// 70 means next card starts 70vw right & 70vh down → small gap, next card just peeks in
+const STEP = 70
+
+// Track dimensions
+const TRACK_W = 100 + (N - 1) * STEP  // e.g. 100 + 210 = 310 vw
+const TRACK_H = 100 + (N - 1) * STEP  // e.g. 310 vh
+
+// We translate from 0 → -(N-1)*STEP vw using % of track width
+const END_PCT_X = (((N - 1) * STEP) / TRACK_W) * 100
+const END_PCT_Y = (((N - 1) * STEP) / TRACK_H) * 100
+
 export default function Methodology() {
+  const sectionRef = useRef(null)
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  })
+
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', `-${END_PCT_X}%`])
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', `-${END_PCT_Y}%`])
+
   return (
-    <section id="methodologie" className="section-padding border-t border-slate-200/70">
-      <div className="container-custom">
-        <div className="mb-20 text-center max-w-2xl mx-auto">
-          <ScrollReveal>
-            <p className="eyebrow mb-5 text-green-500">Notre Méthodologie</p>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-ink-950 mb-6"
-              style={{ fontFamily: 'var(--font-heading)' }}
-            >
-              Une approche par étapes
-            </h2>
-            <p className="text-slate-600">
-              Chaque projet bénéficie d'un suivi strict et normé, garantissant 
-              la fiabilité de nos études et la durabilité des ouvrages.
-            </p>
-          </ScrollReveal>
+    <section
+      id="methodologie"
+      ref={sectionRef}
+      style={{
+        position: 'relative',
+        // Enough height so user scrolls ~90vh per step
+        height: `${(N - 1) * 90 + 100}vh`,
+        background: '#f8f8f6',
+      }}
+    >
+      {/* ── Sticky viewport: explicit height + overflow:hidden clips the track ── */}
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+          width: '100%',
+          overflow: 'hidden',
+          background: '#f8f8f6',
+        }}
+      >
+        {/* Label */}
+        <div style={{
+          position: 'absolute', top: 32, left: 40, zIndex: 50,
+          display: 'flex', alignItems: 'center', gap: 12,
+        }}>
+          <div style={{ width: 32, height: 2, background: '#22c55e' }} />
+          <span style={{
+            fontSize: 11, fontWeight: 700, letterSpacing: '0.2em',
+            textTransform: 'uppercase', color: '#22c55e',
+          }}>
+            Notre Méthodologie
+          </span>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 relative">
-          {/* Decorative connecting line for desktop */}
-          <div className="hidden lg:block absolute top-[28px] left-[10%] right-[10%] h-px bg-slate-200 z-0" />
-
+        {/* ── Diagonal track ── */}
+        <motion.div
+          style={{
+            position: 'absolute',
+            top: 0, left: 0,
+            width: `${TRACK_W}vw`,
+            height: `${TRACK_H}vh`,
+            x, y,
+          }}
+        >
           {steps.map((step, i) => (
-            <ScrollReveal key={i} delay={i * 0.1}>
-              <div className="relative z-10 flex flex-col items-center text-center">
-                
-                {/* Number indicator */}
-                <div className="w-14 h-14 bg-white border-2 border-slate-200 rounded-full flex items-center justify-center mb-8 relative">
-                  <span className="text-lg font-bold text-ink-950" style={{ fontFamily: 'var(--font-heading)' }}>
-                    {step.index}
+            <div
+              key={step.index}
+              style={{
+                position: 'absolute',
+                left: `${i * STEP}vw`,
+                top: `${i * STEP}vh`,
+                width: '100vw',
+                height: '100vh',
+              }}
+            >
+              {/* Giant faint number – bottom left */}
+              <div style={{
+                position: 'absolute',
+                bottom: 24, left: 32,
+                pointerEvents: 'none', userSelect: 'none',
+              }}>
+                <span style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(7rem, 18vw, 20rem)',
+                  fontWeight: 900,
+                  lineHeight: 1,
+                  letterSpacing: '-0.04em',
+                  color: 'rgba(15,23,42,0.05)',
+                  display: 'block',
+                }}>
+                  {step.index}
+                </span>
+              </div>
+
+              {/* ── Layout: card LEFT-CENTER, text RIGHT ── */}
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                // push card a bit left of centre, text fills the right
+                paddingLeft: '8vw',
+                gap: '4vw',
+              }}>
+                {/* Card */}
+                <div style={{
+                  flexShrink: 0,
+                  width: 'min(38vw, 420px)',
+                  aspectRatio: '1 / 1',
+                  minWidth: 240,
+                  background: '#fff',
+                  borderRadius: 28,
+                  boxShadow: '0 24px 64px rgba(0,0,0,0.09)',
+                  border: '1px solid #f0f4f8',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '2.5rem',
+                  zIndex: 2,
+                }}>
+                  <span style={{
+                    color: '#22c55e', fontWeight: 700,
+                    letterSpacing: '0.2em', textTransform: 'uppercase',
+                    fontSize: 11, marginBottom: 20,
+                  }}>
+                    Étape {step.index}
                   </span>
-                  {/* Small accent dot */}
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full" />
+                  <h3 style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
+                    fontWeight: 800,
+                    color: '#0f172a',
+                    textAlign: 'center',
+                    lineHeight: 1.1,
+                    margin: 0,
+                  }}>
+                    {step.title}
+                  </h3>
+                  <div style={{
+                    width: 48, height: 3,
+                    background: '#22c55e',
+                    borderRadius: 999, marginTop: 24,
+                  }} />
                 </div>
 
-                <h3 
-                  className="text-xl font-bold text-ink-950 mb-4"
-                  style={{ fontFamily: 'var(--font-heading)' }}
-                >
-                  {step.title}
-                </h3>
-                
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  {step.desc}
-                </p>
+                {/* Description text – sits naturally to the RIGHT of the card */}
+                <div style={{
+                  flex: 1,
+                  maxWidth: 360,
+                  paddingRight: '2vw',
+                }}>
+                  <p style={{
+                    color: '#64748b',
+                    fontSize: 'clamp(0.95rem, 1.3vw, 1.2rem)',
+                    lineHeight: 1.85,
+                    margin: 0,
+                  }}>
+                    {step.desc}
+                  </p>
+                </div>
               </div>
-            </ScrollReveal>
+            </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

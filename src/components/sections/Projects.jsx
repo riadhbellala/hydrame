@@ -1,130 +1,91 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Star } from 'lucide-react'
+import { projects } from '../../data/projects'
 import ScrollReveal from '../ui/ScrollReveal'
 
-const categories = ['Tous', 'Hydraulique', 'Environnement', 'Infrastructure']
-
-const projects = [
-  {
-    title: 'Aménagement Hydraulique Oued El Harrach',
-    category: 'Hydraulique',
-    metric: 'Capacité de crue: 1200 m³/s',
-    desc: 'Étude de modélisation hydraulique 2D et dimensionnement des ouvrages de protection contre les inondations.',
-    location: 'Alger',
-  },
-  {
-    title: 'Z.I. Sidi Abdellah',
-    category: 'Infrastructure',
-    metric: 'Superficie étudiée: 45 Ha',
-    desc: 'Maîtrise d\'œuvre pour l\'aménagement des réseaux humides (AEP, EU, EP) de la nouvelle zone industrielle.',
-    location: 'Zéralda',
-  },
-  {
-    title: 'Étude d\'Impact Barrage de transfert',
-    category: 'Environnement',
-    metric: 'Rétention: 15 Millions m³',
-    desc: 'Évaluation environnementale complète, étude faune/flore et définition des mesures compensatoires.',
-    location: 'Tizi Ouzou',
-  },
-  {
-    title: 'Station d\'Épuration (STEP)',
-    category: 'Environnement',
-    metric: 'Capacité: 50 000 EH',
-    desc: 'Étude d\'impact sur l\'environnement et dossier de demande d\'autorisation d\'exploitation.',
-    location: 'Bouira',
-  },
-  {
-    title: 'Réseau d\'Irrigation Périurbain',
-    category: 'Hydraulique',
-    metric: 'Linéaire: 18 km',
-    desc: 'Conception d\'un réseau de distribution sous pression pour l\'irrigation agricole à partir de la réutilisation des eaux épurées.',
-    location: 'Tipaza',
-  },
-]
-
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState('Tous')
-
-  const filtered = projects.filter(
-    (p) => activeFilter === 'Tous' || p.category === activeFilter
-  )
-
   return (
-    <section id="projets" className="section-padding">
+    <section id="projets" className="bg-[#f8f8f6] py-32 rounded-[2.5rem] mt-12 mx-4 md:mx-8 mb-12 shadow-sm overflow-hidden border border-slate-200">
       <div className="container-custom">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-          <ScrollReveal>
-            <p className="eyebrow mb-5 text-green-500">Références</p>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-ink-950"
-              style={{ fontFamily: 'var(--font-heading)' }}
-            >
+        {/* Header */}
+        <div className="flex justify-between items-end mb-24 border-b border-slate-200 pb-8">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-[2px] bg-green-500"></div>
+              <p className="text-green-600 tracking-[0.2em] uppercase text-sm font-bold">Notre Travail</p>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-ink-950" style={{ fontFamily: 'var(--font-heading)' }}>
               Projets Récents
             </h2>
-          </ScrollReveal>
-
-          {/* Filters */}
-          <ScrollReveal delay={0.1}>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveFilter(cat)}
-                  className={`px-5 py-2 text-sm font-semibold transition-colors border ${
-                    activeFilter === cat
-                      ? 'bg-ink-950 text-white border-ink-950'
-                      : 'bg-white text-slate-600 border-slate-200 hover:border-ink-950 hover:text-ink-950'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </ScrollReveal>
+          </div>
         </div>
 
-        {/* Projects Grid */}
-        <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence>
-            {filtered.map((project, i) => (
-              <motion.div
-                key={project.title}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="group bg-white border border-slate-200 p-8 flex flex-col h-full hover:border-green-400 transition-colors"
-              >
-                <div className="mb-6 flex items-start justify-between gap-4">
-                  <span className="text-xs font-bold tracking-widest uppercase text-green-600 bg-green-50 px-2 py-1 rounded">
-                    {project.category}
-                  </span>
-                </div>
-                
-                <h3 
-                  className="text-xl font-bold text-ink-950 mb-3 group-hover:text-green-600 transition-colors"
-                  style={{ fontFamily: 'var(--font-heading)' }}
-                >
-                  {project.title}
-                </h3>
-                
-                <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
-                  {project.desc}
-                </p>
+        {/* Projects List */}
+        <div className="flex flex-col gap-32">
+          {projects.map((project, index) => (
+            <div key={project.id} className={`flex flex-col ${index % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-12 lg:gap-24 items-center`}>
+              
+              {/* Content */}
+              <div className="w-full lg:w-[45%]">
+                <ScrollReveal>
+                  <h3 className="text-4xl md:text-5xl lg:text-6xl font-black text-ink-950 leading-[1.1] mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
+                    {project.title}
+                  </h3>
+                  <p className="text-green-600 font-bold uppercase tracking-[0.2em] text-sm mb-8">
+                    {project.subtitle}
+                  </p>
+                  
+                  <p className="text-lg text-slate-600 font-medium leading-relaxed mb-12 max-w-xl">
+                    {project.desc}
+                  </p>
 
-                <div className="pt-6 border-t border-slate-100 mt-auto">
-                  <div className="text-sm font-semibold text-ink-900 mb-1">
-                    {project.metric}
+                  {/* Metrics */}
+                  <div className="grid grid-cols-3 gap-8 mb-12 border-t border-slate-200 pt-8">
+                    {project.metrics.map((m, i) => (
+                      <div key={i}>
+                        <p className="text-xl md:text-2xl font-black text-ink-950 mb-2">
+                          {m.label === 'RATED' ? (
+                            <span className="flex items-center gap-1"><Star className="w-5 h-5 fill-green-500" /> 5.0</span>
+                          ) : (
+                            m.value
+                          )}
+                        </p>
+                        <p className="text-xs text-slate-500 tracking-[0.1em] uppercase font-bold">{m.label}</p>
+                      </div>
+                    ))}
                   </div>
-                  <div className="text-xs text-slate-400 uppercase tracking-widest">
-                    {project.location}
+
+                  {/* CTA */}
+                  <div className="flex flex-wrap gap-4">
+                    <Link to={`/project/${project.id}`} className="inline-flex items-center justify-center px-8 py-4 bg-ink-950 text-white rounded-full font-bold transition-transform hover:scale-105">
+                      Voir le projet <ArrowRight className="w-5 h-5 ml-2" />
+                    </Link>
+                    <a href="#contact" className="inline-flex items-center justify-center px-8 py-4 bg-transparent border border-slate-300 text-ink-950 rounded-full font-bold transition-colors hover:border-ink-950">
+                      Démarrer un projet <ArrowRight className="w-5 h-5 ml-2" />
+                    </a>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+                </ScrollReveal>
+              </div>
+
+              {/* Image */}
+              <div className="w-full lg:w-[55%]">
+                <ScrollReveal delay={0.2}>
+                  <Link to={`/project/${project.id}`} className="block relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl group">
+                    <div className="absolute inset-0 bg-ink-950/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </Link>
+                </ScrollReveal>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   )

@@ -47,6 +47,14 @@ const domains = [
 export default function Expertise() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [visible, setVisible] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const timers = domains.map((_, i) =>
@@ -65,11 +73,11 @@ export default function Expertise() {
   return (
     <section
       id="expertise"
-      className="relative flex flex-col border-t border-slate-200/70"
+      className="relative flex flex-col"
       style={{ height: '100svh', minHeight: '600px' }}
     >
       {/* ── Top Header Bar ──────────────────────────────────── */}
-      <div className="flex items-end justify-between px-10 pt-10 pb-6 flex-shrink-0">
+      <div className="flex items-end justify-between px-6 md:px-10 pt-10 pb-6 flex-shrink-0">
         {/* Eyebrow + Title */}
         <div>
           <div className="flex items-center gap-3 mb-3">
@@ -94,7 +102,7 @@ export default function Expertise() {
       </div>
 
       {/* ── Panels ─────────────────────────────────────────── */}
-      <div className="flex flex-1 min-h-0 px-10 pb-10 gap-0 overflow-hidden" style={{ borderRadius: '20px' }}>
+      <div className={`flex flex-1 min-h-0 px-6 md:px-10 pb-10 gap-0 overflow-hidden ${isMobile ? 'flex-col' : 'flex-row'}`} style={{ borderRadius: '20px' }}>
         {domains.map((domain, index) => {
           const isActive = activeIndex === index;
           return (
@@ -106,20 +114,22 @@ export default function Expertise() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 opacity: visible.includes(index) ? 1 : 0,
-                transform: visible.includes(index) ? 'translateY(0)' : 'translateY(30px)',
+                transform: visible.includes(index) ? (isMobile ? 'translateX(0)' : 'translateY(0)') : (isMobile ? 'translateX(30px)' : 'translateY(30px)'),
                 transition:
                   'flex 0.65s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease, transform 0.5s ease',
                 flex: isActive ? '5 1 0%' : '1 1 0%',
-                minWidth: '54px',
+                minWidth: isMobile ? '100%' : '54px',
+                minHeight: isMobile ? '64px' : '100%',
                 position: 'relative',
                 overflow: 'hidden',
                 cursor: 'pointer',
-                borderRadius: index === 0
-                  ? '16px 0 0 16px'
-                  : index === domains.length - 1
-                  ? '0 16px 16px 0'
-                  : '0',
-                borderRight: index < domains.length - 1
+                borderRadius: isMobile 
+                  ? (index === 0 ? '16px 16px 0 0' : index === domains.length - 1 ? '0 0 16px 16px' : '0')
+                  : (index === 0 ? '16px 0 0 16px' : index === domains.length - 1 ? '0 16px 16px 0' : '0'),
+                borderRight: !isMobile && index < domains.length - 1
+                  ? '2px solid rgba(248,248,246,0.5)'
+                  : 'none',
+                borderBottom: isMobile && index < domains.length - 1
                   ? '2px solid rgba(248,248,246,0.5)'
                   : 'none',
               }}
@@ -135,23 +145,25 @@ export default function Expertise() {
                 }}
               />
 
-              {/* Collapsed: vertical title */}
+              {/* Collapsed: vertical/horizontal title */}
               <div
                 style={{
                   position: 'absolute', inset: 0,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'flex-start' : 'center',
+                  paddingLeft: isMobile ? '20px' : '0',
                   pointerEvents: 'none',
                   opacity: isActive ? 0 : 1,
                   transition: 'opacity 0.3s ease',
                 }}
               >
                 <span
-                  className="text-white font-semibold text-[11px] tracking-[0.25em] uppercase whitespace-nowrap"
+                  className="text-white font-bold tracking-[0.25em] uppercase whitespace-nowrap"
                   style={{
+                    fontSize: isMobile ? '14px' : '11px',
                     fontFamily: 'var(--font-heading)',
-                    writingMode: 'vertical-rl',
-                    textOrientation: 'mixed',
-                    transform: 'rotate(180deg)',
+                    writingMode: isMobile ? 'horizontal-tb' : 'vertical-rl',
+                    textOrientation: isMobile ? 'mixed' : 'mixed',
+                    transform: isMobile ? 'none' : 'rotate(180deg)',
                   }}
                 >
                   {domain.title}
@@ -161,7 +173,12 @@ export default function Expertise() {
               {/* Collapsed: icon dot */}
               <div
                 style={{
-                  position: 'absolute', bottom: 20, left: 0, right: 0,
+                  position: 'absolute', 
+                  bottom: isMobile ? 'auto' : 20, 
+                  top: isMobile ? '50%' : 'auto',
+                  left: isMobile ? 'auto' : 0, 
+                  right: isMobile ? 20 : 0,
+                  transform: isMobile ? 'translateY(-50%)' : 'none',
                   display: 'flex', justifyContent: 'center',
                   opacity: isActive ? 0 : 1,
                   transition: 'opacity 0.3s ease',
@@ -185,7 +202,7 @@ export default function Expertise() {
               <div
                 style={{
                   position: 'absolute', left: 0, right: 0, bottom: 0,
-                  padding: '2rem 2.25rem',
+                  padding: isMobile ? '1rem 1.5rem' : '2rem 2.25rem',
                   pointerEvents: 'none',
                   opacity: isActive ? 1 : 0,
                   transform: isActive ? 'translateY(0)' : 'translateY(16px)',
@@ -193,8 +210,8 @@ export default function Expertise() {
                 }}
               >
                 {/* Tags */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.1rem' }}>
-                  {domain.tags.map((tag, ti) => (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: isMobile ? '0.5rem' : '1.1rem' }}>
+                  {domain.tags.slice(0, isMobile ? 2 : 4).map((tag, ti) => (
                     <span
                       key={ti}
                       style={{
@@ -216,7 +233,7 @@ export default function Expertise() {
                 </div>
 
                 <h3
-                  className="text-white font-bold leading-tight mb-3"
+                  className="text-white font-bold leading-tight mb-2 md:mb-3"
                   style={{
                     fontFamily: 'var(--font-heading)',
                     fontSize: 'clamp(1.4rem, 2vw, 2rem)',
@@ -224,9 +241,11 @@ export default function Expertise() {
                 >
                   {domain.title}
                 </h3>
-                <p className="text-green-100/80 text-sm leading-relaxed max-w-xs">
-                  {domain.detail}
-                </p>
+                {!isMobile && (
+                  <p className="text-green-100/80 text-sm leading-relaxed max-w-xs">
+                    {domain.detail}
+                  </p>
+                )}
               </div>
             </div>
           );

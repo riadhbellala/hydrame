@@ -48,7 +48,7 @@ export default function About() {
     <section
       id="apropos"
       ref={containerRef}
-      className="relative section-padding overflow-hidden bg-white z-20 -mt-8 md:-mt-20 rounded-t-[40px] md:rounded-t-[80px]"
+      className="relative section-padding overflow-hidden bg-[#f8f8f6] z-20 -mt-8 md:-mt-20 rounded-t-[40px] md:rounded-t-[80px]"
       style={{ boxShadow: '0 -20px 40px rgba(0,0,0,0.1)' }}
     >
       {/* Decorative Background Elements (Left) */}
