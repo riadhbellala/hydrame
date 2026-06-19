@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+
 import { Link } from 'react-router-dom'
 import { ArrowRight, Star } from 'lucide-react'
 import { projects } from '../../data/projects'
@@ -58,10 +58,32 @@ export default function Projects() {
 
                   {/* CTA */}
                   <div className="flex flex-wrap gap-4">
-                    <Link to={`/project/${project.id}`} className="inline-flex items-center justify-center px-8 py-4 bg-ink-950 text-white rounded-full font-bold transition-transform hover:scale-105">
+                    <Link 
+                      to={`/project/${project.id}`} 
+                      className="inline-flex items-center justify-center px-8 py-4 rounded-full font-bold transition-all hover:scale-105"
+                      style={{
+                        background: 'rgba(34, 197, 94, 0.2)',
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
+                        border: '1px solid rgba(34, 197, 94, 0.4)',
+                        boxShadow: '0 8px 32px rgba(34, 197, 94, 0.15)',
+                        color: '#15803d' // Dark green text for contrast
+                      }}
+                    >
                       Voir le projet <ArrowRight className="w-5 h-5 ml-2" />
                     </Link>
-                    <a href="#contact" className="inline-flex items-center justify-center px-8 py-4 bg-transparent border border-slate-300 text-ink-950 rounded-full font-bold transition-colors hover:border-ink-950">
+                    <a 
+                      href="#contact" 
+                      className="inline-flex items-center justify-center px-8 py-4 rounded-full font-bold transition-all hover:scale-105"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.2)',
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
+                        border: '1px solid rgba(34, 197, 94, 0.3)',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.05)',
+                        color: '#16a34a'
+                      }}
+                    >
                       Démarrer un projet <ArrowRight className="w-5 h-5 ml-2" />
                     </a>
                   </div>

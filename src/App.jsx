@@ -10,7 +10,7 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col bg-ink-950" style={{ fontFamily: 'var(--font-body)' }}>
+      <div className="min-h-screen flex flex-col bg-[#f8f8f6]" style={{ fontFamily: 'var(--font-body)' }}>
         <Navbar />
         
         {/* Main Content wrapper - sits above the footer to enable the parallax reveal */}

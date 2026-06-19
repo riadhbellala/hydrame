@@ -48,13 +48,24 @@ export default function Navbar() {
   return (
     <>
       <header 
-        className={`fixed top-0 w-full z-50 transition-all duration-500 pointer-events-none ${
-          effectivelyScrolled 
-            ? 'bg-white/95 backdrop-blur-md border-b border-slate-200 py-4 px-6 md:px-12' 
-            : 'pt-6 px-6 md:px-12 bg-transparent'
+        className={`fixed top-0 w-full z-50 transition-all duration-500 pointer-events-none flex justify-center ${
+          effectivelyScrolled ? 'pt-4 md:pt-6' : 'pt-0'
         }`}
       >
-        <div className={`w-full flex ${effectivelyScrolled ? 'flex-row items-center justify-between' : 'flex-col'} pointer-events-auto`}>
+        <div 
+          className={`transition-all duration-500 pointer-events-auto flex ${
+            effectivelyScrolled 
+              ? 'w-[90%] md:w-[85%] max-w-[1200px] flex-row items-center justify-between py-3 px-6 md:px-10 rounded-full' 
+              : 'w-full flex-col pt-6 px-6 md:px-12 bg-transparent'
+          }`}
+          style={effectivelyScrolled ? {
+            background: 'rgba(255, 255, 255, 0.45)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+            border: 'none',
+          } : {}}
+        >
           
           <Link to="/" className="block">
             <motion.div 

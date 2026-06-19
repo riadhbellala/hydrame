@@ -106,7 +106,7 @@ function GalleryGridCell({ index, children, className = '' }) {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.18 }}
-      className={`relative overflow-hidden rounded-2xl shadow-lg ${areaClasses[index]} ${className}`}
+      className={`relative ${areaClasses[index]} ${className}`}
     >
       {children}
     </motion.div>
@@ -174,16 +174,19 @@ export default function Environmental() {
           </ContainerStagger>
 
           {/* ── Right column: Bento gallery grid of cards ─ */}
+          <div className="relative">
+            {/* Decorative glowing orb behind the glass cards */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-gradient-to-br from-green-300/30 to-emerald-400/20 rounded-full blur-[80px] pointer-events-none -z-10" />
 
-          {/* Desktop — asymmetric bento grid */}
-          <div
-            className="hidden md:grid grid-cols-2 gap-4"
-            style={{ gridTemplateRows: '50px 150px 50px 150px 50px' }}
-          >
-            {commitments.map((item, i) => (
-              <GalleryGridCell key={item.index} index={i}>
-                <div className="flex flex-col justify-between h-full p-7 bg-white border border-slate-200 rounded-2xl transition-all duration-300 hover:border-green-300 hover:shadow-xl group">
-                  {/* Top: number */}
+            {/* Desktop — asymmetric bento grid */}
+            <div
+              className="hidden md:grid grid-cols-2 gap-6 relative z-10"
+              style={{ gridTemplateRows: '100px 220px 100px 220px 100px' }}
+            >
+              {commitments.map((item, i) => (
+                <GalleryGridCell key={item.index} index={i}>
+                  <div className="glass-card flex flex-col justify-between h-full p-8 transition-transform duration-300 group hover:-translate-y-1">
+                    {/* Top: number */}
                   <span
                     className="text-xs font-bold tracking-widest text-green-500 mb-4"
                   >
@@ -218,7 +221,7 @@ export default function Environmental() {
           </div>
 
           {/* Mobile — simple 2-col flat grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden relative z-10 mt-12 md:mt-0">
             {commitments.map((item, i) => (
               <motion.div
                 key={item.index}
@@ -226,7 +229,7 @@ export default function Environmental() {
                 whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 viewport={{ once: true }}
                 transition={{ ...SPRING, delay: i * 0.1 }}
-                className="flex flex-col justify-between p-6 bg-white border border-slate-200 rounded-2xl transition-all duration-300 hover:border-green-300 hover:shadow-xl group"
+                className="glass-card flex flex-col justify-between p-6 transition-transform duration-300 group hover:-translate-y-1"
               >
                 <span className="text-xs font-bold tracking-widest text-green-500 mb-3">
                   {item.index}
@@ -242,6 +245,7 @@ export default function Environmental() {
                 </p>
               </motion.div>
             ))}
+          </div>
           </div>
 
         </div>

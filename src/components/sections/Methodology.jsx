@@ -105,74 +105,92 @@ export default function Methodology() {
                 height: '100vh',
               }}
             >
-              {/* Giant faint number – bottom left */}
+              {/* Giant GREEN number – bottom left, like reference photos */}
               <div style={{
                 position: 'absolute',
                 bottom: 24, left: 32,
                 pointerEvents: 'none', userSelect: 'none',
               }}>
                 <span style={{
-                  fontFamily: 'var(--font-heading)',
+                  fontFamily: 'Urbanist, var(--font-heading)',
                   fontSize: 'clamp(7rem, 18vw, 20rem)',
                   fontWeight: 900,
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
-                  color: 'rgba(15,23,42,0.05)',
+                  // Green tint like the reference photos
+                  color: 'rgba(16, 185, 129, 0.15)',
                   display: 'block',
                 }}>
                   {step.index}
                 </span>
               </div>
 
-              {/* ── Layout: card LEFT-CENTER, text RIGHT ── */}
+              {/* ── Layout: glass card LEFT-CENTER, text RIGHT ── */}
               <div style={{
                 position: 'absolute',
                 inset: 0,
                 display: 'flex',
                 alignItems: 'center',
-                // push card a bit left of centre, text fills the right
                 paddingLeft: '8vw',
                 gap: '4vw',
               }}>
-                {/* Card */}
+                {/* Glassmorphism Card */}
                 <div style={{
                   flexShrink: 0,
                   width: 'min(38vw, 420px)',
                   aspectRatio: '1 / 1',
                   minWidth: 240,
-                  background: '#fff',
-                  borderRadius: 28,
-                  boxShadow: '0 24px 64px rgba(0,0,0,0.09)',
-                  border: '1px solid #f0f4f8',
+                  // Glassmorphism effect as requested
+                  background: 'rgba(255, 255, 255, 0.15)', // Increased transparency for deeper glass effect
+                  backdropFilter: 'blur(24px)', // Stronger blur
+                  WebkitBackdropFilter: 'blur(24px)',
+                  borderRadius: 16,
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.4)', // Softer edge
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
                   padding: '2.5rem',
                   zIndex: 2,
+                  position: 'relative',
+                  overflow: 'hidden',
                 }}>
+                  {/* Soft green radial glow inside card */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '-20%', right: '-20%',
+                    width: '60%', height: '60%',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)',
+                    pointerEvents: 'none',
+                  }} />
+
                   <span style={{
-                    color: '#22c55e', fontWeight: 700,
+                    color: '#10b981', fontWeight: 700,
                     letterSpacing: '0.2em', textTransform: 'uppercase',
                     fontSize: 11, marginBottom: 20,
+                    position: 'relative', zIndex: 1,
                   }}>
                     Étape {step.index}
                   </span>
                   <h3 style={{
-                    fontFamily: 'var(--font-heading)',
+                    fontFamily: 'Urbanist, var(--font-heading)',
                     fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
                     fontWeight: 800,
                     color: '#0f172a',
                     textAlign: 'center',
                     lineHeight: 1.1,
                     margin: 0,
+                    position: 'relative', zIndex: 1,
                   }}>
                     {step.title}
                   </h3>
                   <div style={{
                     width: 48, height: 3,
-                    background: '#22c55e',
+                    background: 'linear-gradient(90deg, #10b981, #34d399)',
                     borderRadius: 999, marginTop: 24,
+                    position: 'relative', zIndex: 1,
                   }} />
                 </div>
 

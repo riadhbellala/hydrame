@@ -89,14 +89,25 @@ export default function About() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className={`relative bg-white rounded-2xl p-8 max-w-sm w-full transition-shadow duration-300 hover:shadow-[0_30px_60px_rgba(22,163,74,0.12)] shadow-[0_20px_40px_rgba(0,0,0,0.06)] ${
+                className={`relative rounded-2xl p-8 max-w-sm w-full transition-all duration-300 ${
                   i === 1 ? 'md:ml-24' : i === 2 ? 'md:ml-12' : ''
                 }`}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.15)', // Increased transparency for deeper glass effect
+                  backdropFilter: 'blur(24px)', // Stronger blur
+                  WebkitBackdropFilter: 'blur(24px)',
+                  borderRadius: 16,
+                  border: '1px solid rgba(255, 255, 255, 0.4)', // Softer edge
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                }}
               >
-                {/* Background Watermark Number with slight parallax */}
+                {/* Soft green glow top-right */}
+                <div className="absolute top-0 right-0 w-32 h-32 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+
+                {/* Green Watermark Number */}
                 <motion.div 
                   className="absolute -top-8 -left-8 text-[9rem] font-black leading-none select-none pointer-events-none z-0"
-                  style={{ color: '#f8fafc', fontFamily: 'var(--font-heading)' }}
+                  style={{ color: 'rgba(16,185,129,0.15)', fontFamily: 'Urbanist, var(--font-heading)' }}
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 1, delay: i * 0.2 + 0.3 }}
@@ -105,7 +116,7 @@ export default function About() {
                 </motion.div>
                 
                 <div className="relative z-10">
-                  <h4 className="text-xl font-bold text-ink-900 mb-3" style={{ fontFamily: 'var(--font-heading)' }}>
+                  <h4 className="text-xl font-bold text-ink-900 mb-3" style={{ fontFamily: 'Urbanist, var(--font-heading)' }}>
                     {item.title}
                   </h4>
                   <p className="text-slate-500 text-sm leading-relaxed">
@@ -170,8 +181,8 @@ export default function About() {
               {stats.map((s, i) => (
                 <div key={i}>
                   <div 
-                    className="text-4xl md:text-5xl font-bold text-ink-950 mb-2"
-                    style={{ fontFamily: 'var(--font-heading)' }}
+                    className="text-4xl md:text-5xl font-bold text-green-500 mb-2"
+                    style={{ fontFamily: 'Urbanist, var(--font-heading)' }}
                   >
                     <AnimatedCounter end={s.value} suffix={s.suffix} />
                   </div>
