@@ -1,17 +1,47 @@
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { projects } from '../data/projects'
-import { ArrowLeft } from 'lucide-react'
-import { useEffect } from 'react'
+import { ArrowLeft, Loader2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase'
 
 export default function ProjectDetails() {
   const { id } = useParams()
-  const project = projects.find(p => p.id === id)
+  const [project, setProject] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('id', id)
+          .single()
+        
+        if (error) throw error
+        setProject(data)
+      } catch (error) {
+        console.error('Error fetching project:', error.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchProject()
+  }, [id])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f8f8f6]">
+        <Loader2 className="w-12 h-12 animate-spin text-green-500" />
+      </div>
+    )
+  }
 
   if (!project) {
     return (
@@ -46,22 +76,22 @@ export default function ProjectDetails() {
               {project.title}
             </h1>
             <p className="text-xl text-slate-600 font-medium max-w-2xl">
-              {project.desc}
+              {project.description}
             </p>
           </div>
           <div className="w-full lg:w-1/2 flex flex-col justify-end">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 p-8 bg-white rounded-3xl shadow-sm border border-slate-100">
               <div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Durée</p>
-                <p className="text-xl font-bold text-ink-950">{project.duration}</p>
+                <p className="text-xl font-bold text-ink-950">{project.duration || '-'}</p>
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Lieu</p>
-                <p className="text-xl font-bold text-ink-950">{project.location}</p>
+                <p className="text-xl font-bold text-ink-950">{project.location || '-'}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Partenaire</p>
-                <p className="text-lg font-bold text-ink-950 leading-tight">{project.collaboration}</p>
+                <p className="text-lg font-bold text-ink-950 leading-tight">{project.collaboration || '-'}</p>
               </div>
             </div>
           </div>
@@ -72,10 +102,10 @@ export default function ProjectDetails() {
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full rounded-[2rem] overflow-hidden aspect-[16/9] md:aspect-[21/9] relative shadow-2xl mb-16"
+          className="w-full rounded-[2rem] overflow-hidden aspect-[16/9] md:aspect-[21/9] relative shadow-2xl mb-16 bg-slate-100"
         >
           <img 
-            src={project.image} 
+            src={project.cover_image || 'https://picsum.photos/id/1015/1600/900'} 
             alt={project.title} 
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -89,7 +119,7 @@ export default function ProjectDetails() {
             Les études préliminaires ont permis de définir des solutions techniques adaptées aux contraintes spécifiques du site.
           </p>
           <p className="text-lg text-slate-600 leading-relaxed">
-            Notre équipe a collaboré étroitement avec {project.collaboration} tout au long des {project.duration} de développement pour garantir la réussite de chaque phase, de l'avant-projet jusqu'au dossier de consultation des entreprises.
+            Notre équipe a collaboré étroitement avec {project.collaboration || 'nos partenaires'} tout au long des {project.duration || 'phases'} de développement pour garantir la réussite de chaque phase, de l'avant-projet jusqu'au dossier de consultation des entreprises.
           </p>
         </div>
 

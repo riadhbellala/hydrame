@@ -13,7 +13,7 @@ export const projects = [
     duration: '24 Mois',
     collaboration: 'Ministère des Ressources en Eau',
     location: 'Alger',
-    image: 'https://picsum.photos/id/1015/1600/900'
+    image: 'https://images.unsplash.com/photo-1541888086425-d81bb19240f5?w=1600&h=900&fit=crop'
   },
   {
     id: 'zi-sidi-abdellah',
@@ -29,7 +29,7 @@ export const projects = [
     duration: '18 Mois',
     collaboration: 'Agence Nationale d\'Aménagement',
     location: 'Zéralda',
-    image: 'https://picsum.photos/id/1040/1600/900'
+    image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&h=900&fit=crop'
   },
   {
     id: 'barrage-transfert-tizi',
@@ -45,7 +45,7 @@ export const projects = [
     duration: '12 Mois',
     collaboration: 'Agence Nationale des Barrages (ANBT)',
     location: 'Tizi Ouzou',
-    image: 'https://picsum.photos/id/1047/1600/900'
+    image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&h=900&fit=crop'
   },
   {
     id: 'step-bouira',
@@ -61,7 +61,7 @@ export const projects = [
     duration: '15 Mois',
     collaboration: 'Office National de l\'Assainissement',
     location: 'Bouira',
-    image: 'https://picsum.photos/id/1050/1600/900'
+    image: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1600&h=900&fit=crop'
   },
   {
     id: 'reseau-irrigation-tipaza',
@@ -77,6 +77,6 @@ export const projects = [
     duration: '20 Mois',
     collaboration: 'Direction des Services Agricoles',
     location: 'Tipaza',
-    image: 'https://picsum.photos/id/1053/1600/900'
+    image: 'https://images.unsplash.com/photo-1621619856624-b15252b41221?w=1600&h=900&fit=crop'
   }
 ];
