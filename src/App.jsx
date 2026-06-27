@@ -10,6 +10,7 @@ import ProtectedRoute from './components/admin/ProtectedRoute'
 import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './pages/admin/Dashboard'
 import ProjectForm from './pages/admin/ProjectForm'
+import Demands from './pages/admin/Demands'
 import { Outlet } from 'react-router-dom'
 
 function PublicLayout() {
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="projects/new" element={<ProjectForm />} />
             <Route path="projects/edit/:id" element={<ProjectForm />} />
+            <Route path="demands" element={<Demands />} />
           </Route>
         </Route>
       </Routes>

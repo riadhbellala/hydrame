@@ -1,20 +1,39 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import ScrollReveal from '../ui/ScrollReveal'
+import { supabase } from '../../lib/supabase'
 
 export default function Contact() {
   const [form, setForm] = useState({ nom: '', email: '', sujet: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1200))
-    setLoading(false)
-    setSubmitted(true)
+    setError(null)
+    
+    try {
+      const { error: dbError } = await supabase.from('demands').insert({
+        full_name: form.nom,
+        email: form.email,
+        subject: form.sujet,
+        project_details: form.message
+      })
+
+      if (dbError) throw dbError;
+
+      setSubmitted(true)
+      setForm({ nom: '', email: '', sujet: '', message: '' })
+    } catch (err) {
+      console.error(err)
+      setError("Une erreur est survenue, veuillez réessayer.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -79,7 +98,7 @@ export default function Contact() {
                       Demande envoyée
                     </h3>
                     <p className="text-slate-600 mb-8">
-                      Nous avons bien reçu votre message. Notre équipe technique l'analyse et vous recontacte très rapidement.
+                      Votre demande a été envoyée avec succès !
                     </p>
                     <button
                       onClick={() => setSubmitted(false)}
@@ -92,6 +111,12 @@ export default function Contact() {
                 ) : (
                   <form onSubmit={handleSubmit} className="flex flex-col gap-10">
                     
+                    {error && (
+                      <div className="p-4 bg-red-100 border border-red-200 rounded-xl text-red-600 text-sm">
+                        {error}
+                      </div>
+                    )}
+
                     {/* Inputs with underline only */}
                     <div className="relative">
                       <input

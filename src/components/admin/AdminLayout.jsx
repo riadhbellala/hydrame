@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogOut, LayoutDashboard } from 'lucide-react';
+import { LogOut, LayoutDashboard, Inbox } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 export default function AdminLayout() {
@@ -48,6 +48,19 @@ export default function AdminLayout() {
               >
                 <LayoutDashboard className="w-5 h-5" />
                 Projets
+              </NavLink>
+              <NavLink
+                to="/admin/demands"
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-xl font-body text-sm font-semibold transition-all duration-200 ${
+                    isActive
+                      ? 'bg-green-500/10 text-green-700 border border-green-500/20 shadow-inner'
+                      : 'text-slate-600 hover:bg-white/60 hover:text-ink-900 border border-transparent'
+                  }`
+                }
+              >
+                <Inbox className="w-5 h-5" />
+                Demandes
               </NavLink>
             </nav>
           </div>

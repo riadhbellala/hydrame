@@ -1,6 +1,7 @@
 import { Mail } from 'lucide-react'
 import { MdOutlineWaterDrop } from 'react-icons/md'
 import { FaLinkedin } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
 const navLinks = [
   { label: 'À propos', href: '/#apropos' },
@@ -91,6 +92,9 @@ export default function Footer() {
               <a href="#" className="hover:text-ink-950 transition-colors duration-300">
                 Confidentialité
               </a>
+              <Link to="/admin/login" className="hover:text-ink-950 transition-colors duration-300">
+                Login
+              </Link>
             </nav>
           </div>
         </div>
